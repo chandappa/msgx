@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package msgexchange;
+
+service msgxservice {
+    rpc Message(stream Msg) returns(stream Msg) {}
+}
+
+message Status {
+    enum Result {
+    SUCCESS = 0;
+    FAILURE = 1;
+  }
+  Result result = 1;
+}
+
+message Data {
+    repeated bytes bytes = 1;
+}
+
+message Msg {
+    //unique uuid for clearly distinguishing messages in a stream
+    //uuid of response must match uuid of corresponding request
+    string uuid = 1;
+    oneof content {
+        Status status = 2;
+        Data  data  = 3;
+    }
+}
